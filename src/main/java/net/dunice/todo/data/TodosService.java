@@ -17,7 +17,7 @@ public class TodosService {
         createOrUpdate(todo.withIsReady(willBeCompleted));
     }
 
-    public void createNew(String details) {
+    public Todo createNew(String details) {
         val now = new Date();
         val todo = Todo.builder()
                 .creationDate(now)
@@ -25,15 +25,15 @@ public class TodosService {
                 .details(details)
                 .build();
 
-        createOrUpdate(todo);
+        return createOrUpdate(todo);
     }
 
     public void deleteAllReady() {
         repository.deleteAllByIsReadyTrue();
     }
 
-    public void createOrUpdate(Todo todo) {
-        repository.save(todo);
+    public Todo createOrUpdate(Todo todo) {
+        return repository.save(todo);
     }
 
     public void deleteById(long id) {
