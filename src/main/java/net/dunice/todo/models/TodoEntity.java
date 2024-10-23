@@ -5,8 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Transient;
-import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -51,7 +50,6 @@ public class TodoEntity {
     @NonNull
     Date creationDate;
 
-    @FutureOrPresent
     @DateTimeFormat(pattern = DATE_TIME_PATTERN)
     @JsonProperty(value = "updatedAt")
     @NonNull
@@ -61,9 +59,9 @@ public class TodoEntity {
     @NonNull
     Boolean isReady;
 
-    @Transient
-    public boolean isNotReady() {
-        return !getIsReady();
+    @PrePersist
+    public void recordUpdateTime() {
+        lastUpdateDate = new Date();
     }
 }
 

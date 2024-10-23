@@ -13,8 +13,7 @@ public class ValidationConstants {
 
     public static final String PARAMETER_PAGE_NOT_PRESENT;
 
-    public static final String PARAMETER_PER_PAGE_NOT_PRESENT =
-            PARAMETER_PAGE_NOT_PRESENT.formatted("perPage");
+    public static final String PARAMETER_PER_PAGE_NOT_PRESENT;
 
     public static final String PER_PAGE_MUST_BE_AT_LEAST_1;
 
@@ -52,5 +51,6 @@ public class ValidationConstants {
         PER_PAGE_MUST_BE_LESS_100 = PER_PAGE_MUST_BE.formatted("less", 100);
         PER_PAGE_MUST_BE_AT_LEAST_1 = PER_PAGE_MUST_BE.formatted("greater", 1);
         PARAMETER_PAGE_NOT_PRESENT = PARAMETER_NOT_PRESENT.formatted("page");
+        PARAMETER_PER_PAGE_NOT_PRESENT = PARAMETER_PAGE_NOT_PRESENT.formatted("perPage");
     }
 }

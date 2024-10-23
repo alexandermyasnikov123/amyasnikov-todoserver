@@ -1,23 +1,25 @@
 package net.dunice.todo.data;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.dunice.todo.models.TodoEntity;
 import net.dunice.todo.models.TodoEntityPage;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TodosService {
     private final TodosRepository repository;
 
-    public void toggleTodoCompleted(TodoEntity todo) {
-        val willBeCompleted = !todo.getIsReady();
-        createOrUpdate(todo.withIsReady(willBeCompleted));
+    public void updateAllTodosStatus(boolean isReady) {
+        repository.updateAllTodosStatus(isReady);
+    }
+
+    public void updateTodoStatus(long id, boolean isReady) {
+        repository.updateTodoStatus(id, isReady);
     }
 
     public TodoEntityPage findAllTodos(boolean isReady, int page, int perPage) {
@@ -34,17 +36,19 @@ public class TodosService {
                 .creationDate(now)
                 .lastUpdateDate(now)
                 .details(details)
+                .id(0L)
+                .isReady(false)
                 .build();
 
-        return createOrUpdate(todo);
+        return repository.save(todo);
     }
 
     public void deleteAllReady() {
         repository.deleteAllByIsReadyTrue();
     }
 
-    public TodoEntity createOrUpdate(TodoEntity todoEntity) {
-        return repository.save(todoEntity);
+    public void updateDetails(long id, String details) {
+        repository.updateTodoDetails(id, details);
     }
 
     public void deleteById(long id) {
