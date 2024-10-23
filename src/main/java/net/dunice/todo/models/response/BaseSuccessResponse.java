@@ -1,4 +1,4 @@
-package net.dunice.todo.models.response.common_response;
+package net.dunice.todo.models.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

@@ -5,9 +5,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.PastOrPresent;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.With;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,9 +27,13 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Todo {
+@Entity(name = "todo")
+public class TodoEntity {
     public static final String DATE_TIME_PATTERN = "yyyy.MM.dd, hh:mm:ss";
+
+    public static final int DETAILS_MIN_LENGTH = 3;
+
+    public static final int DETAILS_MAX_LENGTH = 160;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,5 +60,10 @@ public class Todo {
     @JsonProperty(value = "status")
     @NonNull
     Boolean isReady;
+
+    @Transient
+    public boolean isNotReady() {
+        return !getIsReady();
+    }
 }
 

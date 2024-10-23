@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>net.dunice</groupId>
-	<artifactId>todo</artifactId>
+	<artifactId>todoEntity</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>todo</name>
+	<name>todoEntity</name>
 	<description>Demo project for learning purposes</description>
 	<url/>
 	<licenses>
