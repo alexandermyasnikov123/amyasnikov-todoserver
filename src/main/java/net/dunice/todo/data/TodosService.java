@@ -23,8 +23,11 @@ public class TodosService {
         return repository.save(todo);
     }
 
-    public TodoEntityPage findAllTodos(boolean isReady, int page, int perPage) {
-        val data = repository.findAllByIsReady(isReady, PageRequest.of(page, perPage));
+    public TodoEntityPage findAllTodos(Boolean isReady, Integer page, Integer perPage) {
+        val request = PageRequest.of(page, perPage);
+
+        val data = isReady == null ? repository.findAll(request) : repository.findAllByIsReady(isReady, request);
+
         val ready = data.stream().filter(TodoEntity::getIsReady).count();
         val notReady = data.getNumberOfElements() - ready;
 

@@ -12,5 +12,5 @@ public interface TodosRepository extends JpaRepository<TodoEntity, Long> {
     @Transactional
     void deleteAllByIsReadyTrue();
 
-    Page<TodoEntity> findAllByIsReady(boolean isReady, Pageable pageable);
+    Page<TodoEntity> findAllByIsReady(Boolean isReady, Pageable pageable);
 }
