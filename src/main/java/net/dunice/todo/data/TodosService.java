@@ -45,6 +45,7 @@ public class TodosService {
     public void updateAllTodosStatus(boolean isReady) {
         val allTodos = repository.findAll();
         val modifiedTodos = allTodos.stream().map(todo -> todo.withIsReady(isReady)).toList();
+
         repository.saveAll(modifiedTodos);
     }
 
