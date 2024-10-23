@@ -1,0 +1,22 @@
+name: Code Review
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: anc95/ChatGPT-CodeReview@v1.0.11
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          LANGUAGE: Russian
+          OPENAI_API_ENDPOINT: https://api.proxyapi.ru/openai/v1
+          MODEL: gpt-4o-mini
+          PROMPT: "Imagine that you are a very silent senior developer who is a master of his craft in Java, you were asked to review the code in a pull request. You absolutely do not pay attention to acceptable moments, you point out only big obvious problems that need to be fixed immediately, otherwise if this gets into production - everyone will be left without a salary. Write the comment as simple and short as possible, since a young junior does not understand a lot of text and he needs to be pointed out the problematic place, but you will never do the work for him, so not a single line of code. It is forbidden to offer solutions to the problem."
