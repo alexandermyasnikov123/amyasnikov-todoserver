@@ -27,9 +27,9 @@ public class TodosController {
 
     @GetMapping
     public CustomSuccessResponse<GetPaginatedTodosResponse> findTodosByStatus(
-            int page,
-            int perPage,
-            boolean status
+            Integer page,
+            Integer perPage,
+            Boolean status
     ) {
         val result = service.findAllTodos(status, page, perPage);
         val response = new GetPaginatedTodosResponse(
