@@ -1,4 +1,4 @@
-package net.dunice.todo.errors;
+package net.dunice.todo.constants;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

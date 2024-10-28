@@ -2,14 +2,14 @@ package net.dunice.todo.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import net.dunice.todo.data.TodosService;
-import net.dunice.todo.models.TodoEntity;
-import net.dunice.todo.models.request.ChangeStatusTodoDto;
-import net.dunice.todo.models.request.ChangeTextTodoDto;
-import net.dunice.todo.models.request.CreateTodoDto;
-import net.dunice.todo.models.response.BaseSuccessResponse;
-import net.dunice.todo.models.response.CustomSuccessResponse;
-import net.dunice.todo.models.response.GetPaginatedTodosResponse;
+import net.dunice.todo.data.entities.TodoEntity;
+import net.dunice.todo.data.sources.TodosService;
+import net.dunice.todo.dto.request.ChangeStatusTodoRequest;
+import net.dunice.todo.dto.request.ChangeTextTodoRequest;
+import net.dunice.todo.dto.request.CreateTodoRequest;
+import net.dunice.todo.dto.response.BaseSuccessResponse;
+import net.dunice.todo.dto.response.CustomSuccessResponse;
+import net.dunice.todo.dto.response.GetPaginatedTodosResponse;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -39,7 +39,7 @@ public class TodosController {
     }
 
     @PostMapping
-    public CustomSuccessResponse<TodoEntity> createTodo(@RequestBody CreateTodoDto dto) {
+    public CustomSuccessResponse<TodoEntity> createTodo(@RequestBody CreateTodoRequest dto) {
         val data = service.createNew(dto.text());
         return CustomSuccessResponse.success(data);
     }
@@ -51,7 +51,7 @@ public class TodosController {
     }
 
     @PatchMapping
-    public BaseSuccessResponse changeTodoStatus(@RequestBody ChangeStatusTodoDto dto) {
+    public BaseSuccessResponse changeTodoStatus(@RequestBody ChangeStatusTodoRequest dto) {
         service.updateAllTodosStatus(dto.status());
         return BaseSuccessResponse.unknown();
     }
@@ -63,13 +63,13 @@ public class TodosController {
     }
 
     @PatchMapping(path = "status/{id}")
-    public BaseSuccessResponse changeStatus(@PathVariable long id, @RequestBody ChangeStatusTodoDto dto) {
+    public BaseSuccessResponse changeStatus(@PathVariable long id, @RequestBody ChangeStatusTodoRequest dto) {
         service.updateTodoStatus(id, dto.status());
         return BaseSuccessResponse.unknown();
     }
 
     @PatchMapping(path = "text/{id}")
-    public BaseSuccessResponse changeDetails(@PathVariable long id, @RequestBody ChangeTextTodoDto dto) {
+    public BaseSuccessResponse changeDetails(@PathVariable long id, @RequestBody ChangeTextTodoRequest dto) {
         service.updateDetails(id, dto.text());
         return BaseSuccessResponse.unknown();
     }

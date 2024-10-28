@@ -1,4 +1,4 @@
-package net.dunice.todo.models;
+package net.dunice.todo.data.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;

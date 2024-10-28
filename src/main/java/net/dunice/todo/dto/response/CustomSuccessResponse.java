@@ -1,9 +1,9 @@
-package net.dunice.todo.models.response;
+package net.dunice.todo.dto.response;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import lombok.val;
-import net.dunice.todo.errors.ErrorCodes;
+import net.dunice.todo.constants.ErrorCodes;
 
 @Value
 @EqualsAndHashCode(callSuper = true)

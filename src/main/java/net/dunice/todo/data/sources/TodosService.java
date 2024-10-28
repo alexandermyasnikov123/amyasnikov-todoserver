@@ -1,10 +1,10 @@
-package net.dunice.todo.data;
+package net.dunice.todo.data.sources;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import net.dunice.todo.models.TodoEntity;
-import net.dunice.todo.models.TodoEntityPage;
+import net.dunice.todo.data.entities.TodoEntity;
+import net.dunice.todo.others.TodoEntityPage;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
