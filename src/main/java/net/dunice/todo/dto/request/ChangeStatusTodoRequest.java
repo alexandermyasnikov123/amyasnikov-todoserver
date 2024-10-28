@@ -1,4 +1,10 @@
 package net.dunice.todo.dto.request;
 
-public record ChangeStatusTodoRequest(boolean status) {
+import jakarta.validation.constraints.NotNull;
+import net.dunice.todo.constants.ValidationConstants;
+
+public record ChangeStatusTodoRequest(
+        @NotNull(message = ValidationConstants.TODO_STATUS_NOT_NULL)
+        Boolean status
+) {
 }

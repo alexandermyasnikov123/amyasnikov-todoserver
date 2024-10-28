@@ -1,66 +1,24 @@
 package net.dunice.todo.data.sources;
 
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 import net.dunice.todo.data.entities.TodoEntity;
 import net.dunice.todo.others.TodoEntityPage;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
 
-@Service
-@RequiredArgsConstructor
-public class TodosService {
-    private final TodosRepository repository;
+public interface TodosService {
+    TodoEntity createNew(String details);
 
-    public TodoEntity createNew(String details) {
-        val todo = TodoEntity.builder()
-                .details(details)
-                .id(0L)
-                .isReady(false)
-                .build();
-
-        return repository.save(todo);
-    }
-
-    public TodoEntityPage findAllTodos(Boolean isReady, Integer page, Integer perPage) {
-        val request = PageRequest.of(page, perPage);
-
-        val data = isReady == null ? repository.findAll(request) : repository.findAllByIsReady(isReady, request);
-
-        val ready = data.stream().filter(TodoEntity::getIsReady).count();
-        val notReady = data.getNumberOfElements() - ready;
-
-        return new TodoEntityPage(data, ready, notReady);
-    }
+    TodoEntityPage findAllTodos(Boolean isReady, Integer page, Integer perPage);
 
     @Transactional
-    public void updateDetails(long id, String details) {
-        val todo = repository.findById(id).orElseThrow();
-        todo.setDetails(details);
-        repository.save(todo);
-    }
+    void updateDetails(long id, String details);
 
     @Transactional
-    public void updateAllTodosStatus(boolean isReady) {
-        val allTodos = repository.findAll();
-        val modifiedTodos = allTodos.stream().map(todo -> todo.withIsReady(isReady)).toList();
-
-        repository.saveAll(modifiedTodos);
-    }
+    void updateAllTodosStatus(boolean isReady);
 
     @Transactional
-    public void updateTodoStatus(long id, boolean isReady) {
-        val todo = repository.findById(id).orElseThrow();
-        todo.setIsReady(isReady);
-        repository.save(todo);
-    }
+    void updateTodoStatus(long id, boolean isReady);
 
-    public void deleteById(long id) {
-        repository.deleteById(id);
-    }
+    void deleteById(long id);
 
-    public void deleteAllReady() {
-        repository.deleteAllByIsReadyTrue();
-    }
+    void deleteAllReady();
 }

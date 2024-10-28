@@ -1,7 +1,10 @@
 package net.dunice.todo.controllers;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import net.dunice.todo.constants.ValidationConstants;
 import net.dunice.todo.data.entities.TodoEntity;
 import net.dunice.todo.data.sources.TodosService;
 import net.dunice.todo.dto.request.ChangeStatusTodoRequest;
@@ -10,6 +13,7 @@ import net.dunice.todo.dto.request.CreateTodoRequest;
 import net.dunice.todo.dto.response.BaseSuccessResponse;
 import net.dunice.todo.dto.response.CustomSuccessResponse;
 import net.dunice.todo.dto.response.GetPaginatedTodosResponse;
+import net.dunice.todo.others.PositiveOrZeroId;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -27,7 +31,9 @@ public class TodosController {
 
     @GetMapping
     public CustomSuccessResponse<GetPaginatedTodosResponse> findTodosByStatus(
+            @NotNull(message = ValidationConstants.REQUIRED_INT_PARAM_PAGE_IS_NOT_PRESENT)
             Integer page,
+            @NotNull(message = ValidationConstants.REQUIRED_INT_PARAM_PER_PAGE_IS_NOT_PRESENT)
             Integer perPage,
             Boolean status
     ) {
@@ -39,7 +45,10 @@ public class TodosController {
     }
 
     @PostMapping
-    public CustomSuccessResponse<TodoEntity> createTodo(@RequestBody CreateTodoRequest dto) {
+    public CustomSuccessResponse<TodoEntity> createTodo(
+            @RequestBody
+            @Valid
+            CreateTodoRequest dto) {
         val data = service.createNew(dto.text());
         return CustomSuccessResponse.success(data);
     }
@@ -47,31 +56,50 @@ public class TodosController {
     @DeleteMapping
     public BaseSuccessResponse deleteAllReady() {
         service.deleteAllReady();
-        return BaseSuccessResponse.unknown();
+        return BaseSuccessResponse.success();
     }
 
     @PatchMapping
-    public BaseSuccessResponse changeTodoStatus(@RequestBody ChangeStatusTodoRequest dto) {
+    public BaseSuccessResponse changeTodoStatus(
+            @RequestBody
+            @Valid
+            ChangeStatusTodoRequest dto) {
         service.updateAllTodosStatus(dto.status());
-        return BaseSuccessResponse.unknown();
+        return BaseSuccessResponse.success();
     }
 
     @DeleteMapping(path = "{id}")
-    public BaseSuccessResponse deleteTodo(@PathVariable long id) {
+    public BaseSuccessResponse deleteTodo(
+            @PathVariable
+            @PositiveOrZeroId
+            Long id
+    ) {
         service.deleteById(id);
-        return BaseSuccessResponse.unknown();
+        return BaseSuccessResponse.success();
     }
 
     @PatchMapping(path = "status/{id}")
-    public BaseSuccessResponse changeStatus(@PathVariable long id, @RequestBody ChangeStatusTodoRequest dto) {
+    public BaseSuccessResponse changeStatus(
+            @PathVariable
+            @PositiveOrZeroId
+            Long id,
+            @RequestBody
+            @Valid
+            ChangeStatusTodoRequest dto) {
         service.updateTodoStatus(id, dto.status());
-        return BaseSuccessResponse.unknown();
+        return BaseSuccessResponse.success();
     }
 
     @PatchMapping(path = "text/{id}")
-    public BaseSuccessResponse changeDetails(@PathVariable long id, @RequestBody ChangeTextTodoRequest dto) {
+    public BaseSuccessResponse changeDetails(
+            @PathVariable
+            @PositiveOrZeroId
+            Long id,
+            @RequestBody
+            @Valid
+            ChangeTextTodoRequest dto) {
         service.updateDetails(id, dto.text());
-        return BaseSuccessResponse.unknown();
+        return BaseSuccessResponse.success();
     }
 }
 

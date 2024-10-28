@@ -8,6 +8,8 @@ import lombok.Getter;
 public enum ErrorCodes {
     UNKNOWN(0, ValidationConstants.UNKNOWN),
 
+    OK(1, ValidationConstants.ALL_OK),
+
     MUST_NOT_BE_NULL(4, ValidationConstants.MUST_NOT_BE_NULL),
 
     PARAM_PAGE_NOT_NULL(15, ValidationConstants.PARAMETER_PAGE_NOT_PRESENT),

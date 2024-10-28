@@ -15,12 +15,12 @@ public class CustomSuccessResponse<T> extends BaseSuccessResponse {
         this.data = data;
     }
 
-    public static <T> CustomSuccessResponse<T> from(ErrorCodes codes, T data) {
-        val code = codes.getCode();
-        return new CustomSuccessResponse<>(code, code == ErrorCodes.UNKNOWN.getCode(), data);
+    public static <T> CustomSuccessResponse<T> success(T data) {
+        return new CustomSuccessResponse<>(ErrorCodes.OK.getCode(), true, data);
     }
 
-    public static <T> CustomSuccessResponse<T> success(T data) {
-        return new CustomSuccessResponse<>(ErrorCodes.UNKNOWN.getCode(), true, data);
+    public static <T> CustomSuccessResponse<T> from(ErrorCodes errorCode, T data) {
+        val code = errorCode.getCode();
+        return new CustomSuccessResponse<>(code, errorCode == ErrorCodes.OK, data);
     }
 }
