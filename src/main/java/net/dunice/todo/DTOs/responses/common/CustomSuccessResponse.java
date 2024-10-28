@@ -1,8 +1,7 @@
-package net.dunice.todo.dto.response;
+package net.dunice.todo.DTOs.responses.common;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;
-import lombok.val;
 import net.dunice.todo.constants.ErrorCodes;
 
 @Value
@@ -20,7 +19,7 @@ public class CustomSuccessResponse<T> extends BaseSuccessResponse {
     }
 
     public static <T> CustomSuccessResponse<T> from(ErrorCodes errorCode, T data) {
-        val code = errorCode.getCode();
+        int code = errorCode.getCode();
         return new CustomSuccessResponse<>(code, errorCode == ErrorCodes.OK, data);
     }
 }

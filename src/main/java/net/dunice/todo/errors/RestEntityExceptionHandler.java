@@ -1,10 +1,9 @@
 package net.dunice.todo.errors;
 
-import lombok.val;
+import net.dunice.todo.DTOs.responses.common.BaseSuccessResponse;
+import net.dunice.todo.DTOs.responses.common.CustomSuccessResponse;
 import net.dunice.todo.constants.ErrorCodes;
 import net.dunice.todo.constants.HeaderConstants;
-import net.dunice.todo.dto.response.BaseSuccessResponse;
-import net.dunice.todo.dto.response.CustomSuccessResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,7 +21,7 @@ public class RestEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {IllegalArgumentException.class, IllegalStateException.class})
     protected ResponseEntity<BaseSuccessResponse> handleConflict(RuntimeException exception) {
-        val errorCode = errorCodes.getOrDefault(exception.getMessage(), ErrorCodes.UNKNOWN);
+        ErrorCodes errorCode = errorCodes.getOrDefault(exception.getMessage(), ErrorCodes.UNKNOWN);
         return ResponseEntity.badRequest()
                 .header(HeaderConstants.ERROR_HEADER, errorCode.getMessage())
                 .body(CustomSuccessResponse.from(errorCode, List.of(errorCode.getCode())));

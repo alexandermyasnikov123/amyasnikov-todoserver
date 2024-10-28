@@ -1,8 +1,8 @@
-package net.dunice.todo.data.sources;
+package net.dunice.todo.services;
 
 import jakarta.transaction.Transactional;
-import net.dunice.todo.data.entities.TodoEntity;
-import net.dunice.todo.others.TodoEntityPage;
+import net.dunice.todo.entities.TodoEntity;
+import net.dunice.todo.paging.TodoEntityPage;
 
 public interface TodosService {
     TodoEntity createNew(String details);

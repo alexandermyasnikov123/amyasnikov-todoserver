@@ -1,10 +1,9 @@
-package net.dunice.todo.dto.response;
+package net.dunice.todo.DTOs.responses.common;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import lombok.experimental.NonFinal;
-import lombok.val;
 import net.dunice.todo.constants.ErrorCodes;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class BaseSuccessResponse {
     }
 
     public static BaseSuccessResponse from(ErrorCodes errorCode) {
-        val code = errorCode.getCode();
+        int code = errorCode.getCode();
         return new BaseSuccessResponse(code, errorCode == ErrorCodes.OK);
     }
 }

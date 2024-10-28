@@ -1,6 +1,6 @@
-package net.dunice.todo.dto.response;
+package net.dunice.todo.DTOs.responses;
 
-import net.dunice.todo.data.entities.TodoEntity;
+import net.dunice.todo.entities.TodoEntity;
 
 public record GetPaginatedTodosResponse(
         Iterable<TodoEntity> content,

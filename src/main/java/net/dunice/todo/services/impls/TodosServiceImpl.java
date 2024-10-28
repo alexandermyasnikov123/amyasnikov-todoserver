@@ -1,12 +1,17 @@
-package net.dunice.todo.data.sources;
+package net.dunice.todo.services.impls;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import net.dunice.todo.data.entities.TodoEntity;
-import net.dunice.todo.others.TodoEntityPage;
+import net.dunice.todo.entities.TodoEntity;
+import net.dunice.todo.paging.TodoEntityPage;
+import net.dunice.todo.repositories.TodosRepository;
+import net.dunice.todo.services.TodosService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,7 +20,7 @@ public class TodosServiceImpl implements TodosService {
 
     @Override
     public TodoEntity createNew(String details) {
-        val todo = TodoEntity.builder()
+        TodoEntity todo = TodoEntity.builder()
                 .details(details)
                 .id(0L)
                 .isReady(false)
@@ -26,12 +31,14 @@ public class TodosServiceImpl implements TodosService {
 
     @Override
     public TodoEntityPage findAllTodos(Boolean isReady, Integer page, Integer perPage) {
-        val request = PageRequest.of(page, perPage);
+        Pageable request = PageRequest.of(page, perPage);
 
-        val data = isReady == null ? repository.findAll(request) : repository.findAllByIsReady(isReady, request);
+        Page<TodoEntity> data = isReady == null ?
+                repository.findAll(request) :
+                repository.findAllByIsReady(isReady, request);
 
-        val ready = data.stream().filter(TodoEntity::getIsReady).count();
-        val notReady = data.getNumberOfElements() - ready;
+        long ready = data.stream().filter(TodoEntity::getIsReady).count();
+        long notReady = data.getNumberOfElements() - ready;
 
         return new TodoEntityPage(data, ready, notReady);
     }
@@ -39,7 +46,7 @@ public class TodosServiceImpl implements TodosService {
     @Transactional
     @Override
     public void updateDetails(long id, String details) {
-        val todo = repository.findById(id).orElseThrow();
+        TodoEntity todo = repository.findById(id).orElseThrow();
         todo.setDetails(details);
         repository.save(todo);
     }
@@ -47,8 +54,8 @@ public class TodosServiceImpl implements TodosService {
     @Transactional
     @Override
     public void updateAllTodosStatus(boolean isReady) {
-        val allTodos = repository.findAll();
-        val modifiedTodos = allTodos.stream().map(todo -> todo.withIsReady(isReady)).toList();
+        List<TodoEntity> allTodos = repository.findAll();
+        List<TodoEntity> modifiedTodos = allTodos.stream().map(todo -> todo.withIsReady(isReady)).toList();
 
         repository.saveAll(modifiedTodos);
     }
@@ -56,7 +63,7 @@ public class TodosServiceImpl implements TodosService {
     @Transactional
     @Override
     public void updateTodoStatus(long id, boolean isReady) {
-        val todo = repository.findById(id).orElseThrow();
+        TodoEntity todo = repository.findById(id).orElseThrow();
         todo.setIsReady(isReady);
         repository.save(todo);
     }

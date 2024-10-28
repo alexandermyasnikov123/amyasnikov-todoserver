@@ -1,4 +1,4 @@
-package net.dunice.todo.dto.request;
+package net.dunice.todo.DTOs.requests;
 
 import jakarta.validation.constraints.NotNull;
 import net.dunice.todo.constants.ValidationConstants;

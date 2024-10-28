@@ -1,4 +1,4 @@
-package net.dunice.todo.data.entities;
+package net.dunice.todo.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.With;
 import lombok.experimental.FieldDefaults;
-import lombok.val;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -61,7 +60,7 @@ public class TodoEntity {
 
     @PrePersist
     public void recordCreatedTime() {
-        val now = new Date();
+        Date now = new Date();
         setCreationDate(now);
         setLastUpdateDate(now);
     }

@@ -1,7 +1,7 @@
-package net.dunice.todo.others;
+package net.dunice.todo.paging;
 
 import lombok.experimental.Delegate;
-import net.dunice.todo.data.entities.TodoEntity;
+import net.dunice.todo.entities.TodoEntity;
 import org.springframework.data.domain.Page;
 
 public record TodoEntityPage(
@@ -10,3 +10,4 @@ public record TodoEntityPage(
         long notReadyTodos
 ) implements Page<TodoEntity> {
 }
+

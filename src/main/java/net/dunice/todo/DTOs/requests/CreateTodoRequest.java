@@ -1,11 +1,11 @@
-package net.dunice.todo.dto.request;
+package net.dunice.todo.DTOs.requests;
 
 import jakarta.validation.constraints.NotNull;
 import net.dunice.todo.constants.ValidationConstants;
-import net.dunice.todo.data.entities.TodoEntity;
+import net.dunice.todo.entities.TodoEntity;
 import org.hibernate.validator.constraints.Length;
 
-public record ChangeTextTodoRequest(
+public record CreateTodoRequest(
         @NotNull(message = ValidationConstants.TODO_TEXT_NOT_NULL)
         @Length(
                 min = TodoEntity.DETAILS_MIN_LENGTH,
@@ -14,5 +14,4 @@ public record ChangeTextTodoRequest(
         )
         String text
 ) {
-
 }

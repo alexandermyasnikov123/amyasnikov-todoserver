@@ -2,18 +2,18 @@ package net.dunice.todo.controllers;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+import net.dunice.todo.DTOs.requests.ChangeStatusTodoRequest;
+import net.dunice.todo.DTOs.requests.ChangeTextTodoRequest;
+import net.dunice.todo.DTOs.requests.CreateTodoRequest;
+import net.dunice.todo.DTOs.responses.GetPaginatedTodosResponse;
+import net.dunice.todo.DTOs.responses.common.BaseSuccessResponse;
+import net.dunice.todo.DTOs.responses.common.CustomSuccessResponse;
 import net.dunice.todo.constants.ValidationConstants;
-import net.dunice.todo.data.entities.TodoEntity;
-import net.dunice.todo.data.sources.TodosService;
-import net.dunice.todo.dto.request.ChangeStatusTodoRequest;
-import net.dunice.todo.dto.request.ChangeTextTodoRequest;
-import net.dunice.todo.dto.request.CreateTodoRequest;
-import net.dunice.todo.dto.response.BaseSuccessResponse;
-import net.dunice.todo.dto.response.CustomSuccessResponse;
-import net.dunice.todo.dto.response.GetPaginatedTodosResponse;
-import net.dunice.todo.others.PositiveOrZeroId;
+import net.dunice.todo.entities.TodoEntity;
+import net.dunice.todo.paging.TodoEntityPage;
+import net.dunice.todo.services.TodosService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -37,8 +37,8 @@ public class TodosController {
             Integer perPage,
             Boolean status
     ) {
-        val result = service.findAllTodos(status, page, perPage);
-        val response = new GetPaginatedTodosResponse(
+        TodoEntityPage result = service.findAllTodos(status, page, perPage);
+        GetPaginatedTodosResponse response = new GetPaginatedTodosResponse(
                 result.getContent(), result.notReadyTodos(), result.readyTodos(), result.getNumberOfElements()
         );
         return CustomSuccessResponse.success(response);
@@ -49,7 +49,7 @@ public class TodosController {
             @RequestBody
             @Valid
             CreateTodoRequest dto) {
-        val data = service.createNew(dto.text());
+        TodoEntity data = service.createNew(dto.text());
         return CustomSuccessResponse.success(data);
     }
 
@@ -71,7 +71,7 @@ public class TodosController {
     @DeleteMapping(path = "{id}")
     public BaseSuccessResponse deleteTodo(
             @PathVariable
-            @PositiveOrZeroId
+            @Positive(message = ValidationConstants.ID_MUST_BE_POSITIVE)
             Long id
     ) {
         service.deleteById(id);
@@ -81,7 +81,7 @@ public class TodosController {
     @PatchMapping(path = "status/{id}")
     public BaseSuccessResponse changeStatus(
             @PathVariable
-            @PositiveOrZeroId
+            @Positive(message = ValidationConstants.ID_MUST_BE_POSITIVE)
             Long id,
             @RequestBody
             @Valid
@@ -93,7 +93,7 @@ public class TodosController {
     @PatchMapping(path = "text/{id}")
     public BaseSuccessResponse changeDetails(
             @PathVariable
-            @PositiveOrZeroId
+            @Positive(message = ValidationConstants.ID_MUST_BE_POSITIVE)
             Long id,
             @RequestBody
             @Valid
