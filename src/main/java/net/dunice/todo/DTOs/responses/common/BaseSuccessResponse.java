@@ -6,9 +6,6 @@ import lombok.Value;
 import lombok.experimental.NonFinal;
 import net.dunice.todo.constants.ErrorCodes;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 @Value
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NonFinal
@@ -17,14 +14,15 @@ public class BaseSuccessResponse {
 
     boolean success;
 
-    Collection<Integer> codes = new ArrayList<>();
-
-    public static BaseSuccessResponse success() {
-        return from(ErrorCodes.OK);
+    public BaseSuccessResponse(int statusCode) {
+        this(statusCode, statusCode == ErrorCodes.OK.getCode());
     }
 
-    public static BaseSuccessResponse from(ErrorCodes errorCode) {
-        int code = errorCode.getCode();
-        return new BaseSuccessResponse(code, errorCode == ErrorCodes.OK);
+    public BaseSuccessResponse(ErrorCodes errorCodes) {
+        this(errorCodes.getCode());
+    }
+
+    public static BaseSuccessResponse success() {
+        return new BaseSuccessResponse(ErrorCodes.OK);
     }
 }

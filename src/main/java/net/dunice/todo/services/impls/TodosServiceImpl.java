@@ -37,8 +37,9 @@ public class TodosServiceImpl implements TodosService {
                 repository.findAll(request) :
                 repository.findAllByIsReady(isReady, request);
 
+        long numberOfElements = data.getNumberOfElements();
         long ready = data.stream().filter(TodoEntity::getIsReady).count();
-        long notReady = data.getNumberOfElements() - ready;
+        long notReady = numberOfElements - ready;
 
         return new TodoEntityPage(data, ready, notReady);
     }

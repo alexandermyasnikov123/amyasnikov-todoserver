@@ -2,10 +2,10 @@ package net.dunice.todo.DTOs.responses;
 
 import net.dunice.todo.entities.TodoEntity;
 
-public record GetPaginatedTodosResponse(
+public record TodoEntityPageResponse(
         Iterable<TodoEntity> content,
-        long notReady,
         long ready,
+        long notReady,
         long numberOfElements
 ) {
 }
