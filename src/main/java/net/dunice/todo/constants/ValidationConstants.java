@@ -20,7 +20,7 @@ public interface ValidationConstants {
             "perPage must be less or equal 100";
 
     String ID_MUST_BE_POSITIVE =
-            "An identifier must be a positive value.";
+            "An identifier must be a PositiveOrZero value.";
 
     String TODO_TEXT_NOT_NULL =
             "The text of the TodoEntity task must be a non-null value.";

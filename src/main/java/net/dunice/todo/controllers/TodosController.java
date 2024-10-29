@@ -2,7 +2,7 @@ package net.dunice.todo.controllers;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import net.dunice.todo.DTOs.requests.ChangeStatusTodoRequest;
 import net.dunice.todo.DTOs.requests.ChangeTextTodoRequest;
@@ -17,6 +17,7 @@ import net.dunice.todo.entities.TodoEntity;
 import net.dunice.todo.paging.TodoEntityPage;
 import net.dunice.todo.services.TodosService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Validated
 @RestController
 @RequestMapping(path = "v1/todo")
 @RequiredArgsConstructor
@@ -77,7 +79,7 @@ public class TodosController {
     @DeleteMapping(path = "{id}")
     public ResponseEntity<BaseSuccessResponse> deleteTodo(
             @PathVariable
-            @Positive(message = ValidationConstants.ID_MUST_BE_POSITIVE)
+            @PositiveOrZero(message = ValidationConstants.ID_MUST_BE_POSITIVE)
             Long id
     ) {
         service.deleteById(id);
@@ -87,7 +89,7 @@ public class TodosController {
     @PatchMapping(path = "status/{id}")
     public ResponseEntity<BaseSuccessResponse> changeStatus(
             @PathVariable
-            @Positive(message = ValidationConstants.ID_MUST_BE_POSITIVE)
+            @PositiveOrZero(message = ValidationConstants.ID_MUST_BE_POSITIVE)
             Long id,
             @RequestBody
             @Valid
@@ -99,7 +101,7 @@ public class TodosController {
     @PatchMapping(path = "text/{id}")
     public ResponseEntity<BaseSuccessResponse> changeDetails(
             @PathVariable
-            @Positive(message = ValidationConstants.ID_MUST_BE_POSITIVE)
+            @PositiveOrZero(message = ValidationConstants.ID_MUST_BE_POSITIVE)
             Long id,
             @RequestBody
             @Valid
