@@ -2,7 +2,7 @@ package net.dunice.todo.DTOs.responses;
 
 import net.dunice.todo.entities.TodoEntity;
 
-public record TodoEntityPageResponse(
+public record TodosPageResponse(
         Iterable<TodoEntity> content,
         long ready,
         long notReady,

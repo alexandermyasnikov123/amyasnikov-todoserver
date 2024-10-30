@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -16,9 +14,11 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.With;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.Date;
 
 @Data
@@ -48,26 +48,17 @@ public class TodoEntity {
     @PastOrPresent
     @DateTimeFormat(pattern = DATE_TIME_PATTERN)
     @JsonProperty(value = "createdAt")
+    @CreatedDate
+    @CreationTimestamp
     Date creationDate;
 
     @DateTimeFormat(pattern = DATE_TIME_PATTERN)
     @JsonProperty(value = "updatedAt")
+    @UpdateTimestamp
     Date lastUpdateDate;
 
     @JsonProperty(value = "status")
     @NonNull
     Boolean isReady;
-
-    @PrePersist
-    public void recordCreatedTime() {
-        Date now = new Date();
-        setCreationDate(now);
-        setLastUpdateDate(now);
-    }
-
-    @PreUpdate
-    public void recordUpdateTime() {
-        setLastUpdateDate(new Date());
-    }
 }
 

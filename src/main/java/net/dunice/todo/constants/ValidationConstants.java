@@ -8,10 +8,12 @@ public interface ValidationConstants {
     String MUST_NOT_BE_NULL = "must not be null";
 
     String PARAMETER_PAGE_NOT_PRESENT =
-            "Required Integer parameter 'page' is not present";
+            "Required request parameter 'page' for method parameter type Integer is not present";
 
     String PARAMETER_PER_PAGE_NOT_PRESENT =
-            "Required Integer parameter 'perPage' is not present";
+            "Required request parameter 'perPage' for method parameter type Integer is not present";
+
+    String PAGE_MUST_BE_AT_LEAST_1 = "page must be greater or equal 1";
 
     String PER_PAGE_MUST_BE_AT_LEAST_1 =
             "perPage must be greater or equal 1";
@@ -20,7 +22,7 @@ public interface ValidationConstants {
             "perPage must be less or equal 100";
 
     String ID_MUST_BE_POSITIVE =
-            "An identifier must be a PositiveOrZero value.";
+            "An identifier must be a positive value.";
 
     String TODO_TEXT_NOT_NULL =
             "The text of the TodoEntity task must be a non-null value.";
@@ -32,9 +34,9 @@ public interface ValidationConstants {
     String TODO_STATUS_NOT_NULL =
             "The status of the TodoEntity task can't be a null value.";
 
-    String REQUIRED_INT_PARAM_PAGE_IS_NOT_PRESENT =
-            "Can't find a required int param 'page'. Do you add it?";
+    String PARAM_PAGE_NOT_NULL =
+            "Required request parameter 'page' for method parameter type Integer is present but converted to null";
 
-    String REQUIRED_INT_PARAM_PER_PAGE_IS_NOT_PRESENT =
-            "Can't find a required int param 'perPage'. Do you add it?";
+    String PARAM_PER_PAGE_NOT_NULL =
+            "Required request parameter 'perPage' for method parameter type Integer is present but converted to null";
 }

@@ -1,20 +1,19 @@
 package net.dunice.todo.controllers;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import net.dunice.todo.DTOs.requests.ChangeStatusTodoRequest;
 import net.dunice.todo.DTOs.requests.ChangeTextTodoRequest;
 import net.dunice.todo.DTOs.requests.CreateTodoRequest;
 import net.dunice.todo.DTOs.responses.GetPaginatedResponse;
-import net.dunice.todo.DTOs.responses.TodoEntityPageResponse;
 import net.dunice.todo.DTOs.responses.TodoEntityResponse;
+import net.dunice.todo.DTOs.responses.TodosPageResponse;
 import net.dunice.todo.DTOs.responses.common.BaseSuccessResponse;
 import net.dunice.todo.constants.ErrorCodes;
 import net.dunice.todo.constants.ValidationConstants;
-import net.dunice.todo.entities.TodoEntity;
-import net.dunice.todo.paging.TodoEntityPage;
 import net.dunice.todo.services.TodosService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Validated
@@ -36,17 +36,17 @@ public class TodosController {
 
     @GetMapping
     public ResponseEntity<GetPaginatedResponse> findTodosByStatus(
-            @NotNull(message = ValidationConstants.REQUIRED_INT_PARAM_PAGE_IS_NOT_PRESENT)
+            @RequestParam
+            @Positive(message = ValidationConstants.PAGE_MUST_BE_AT_LEAST_1)
             Integer page,
-            @NotNull(message = ValidationConstants.REQUIRED_INT_PARAM_PER_PAGE_IS_NOT_PRESENT)
+            @RequestParam
+            @Min(value = 1, message = ValidationConstants.PER_PAGE_MUST_BE_AT_LEAST_1)
+            @Max(value = 100, message = ValidationConstants.PER_PAGE_MUST_BE_LESS_100)
             Integer perPage,
             Boolean status
     ) {
-        TodoEntityPage result = service.findAllTodos(status, page, perPage);
-        TodoEntityPageResponse response = new TodoEntityPageResponse(
-                result.getContent(), result.readyTodos(), result.notReadyTodos(), result.getNumberOfElements()
-        );
-        GetPaginatedResponse body = new GetPaginatedResponse(ErrorCodes.OK, response);
+        TodosPageResponse result = service.findAllTodos(status, page - 1, perPage);
+        GetPaginatedResponse body = new GetPaginatedResponse(ErrorCodes.OK, result);
         return ResponseEntity.ok(body);
     }
 
@@ -56,8 +56,7 @@ public class TodosController {
             @Valid
             CreateTodoRequest dto
     ) {
-        TodoEntity data = service.createNew(dto.text());
-        TodoEntityResponse body = new TodoEntityResponse(ErrorCodes.OK, data);
+        TodoEntityResponse body = service.insertNewEntity(dto);
         return ResponseEntity.ok(body);
     }
 
@@ -71,15 +70,16 @@ public class TodosController {
     public ResponseEntity<BaseSuccessResponse> changeTodoStatus(
             @RequestBody
             @Valid
-            ChangeStatusTodoRequest dto) {
-        service.updateAllTodosStatus(dto.status());
+            ChangeStatusTodoRequest dto
+    ) {
+        service.updateAllTodosStatus(dto);
         return ResponseEntity.ok(BaseSuccessResponse.success());
     }
 
     @DeleteMapping(path = "{id}")
     public ResponseEntity<BaseSuccessResponse> deleteTodo(
             @PathVariable
-            @PositiveOrZero(message = ValidationConstants.ID_MUST_BE_POSITIVE)
+            @Positive(message = ValidationConstants.ID_MUST_BE_POSITIVE)
             Long id
     ) {
         service.deleteById(id);
@@ -89,24 +89,26 @@ public class TodosController {
     @PatchMapping(path = "status/{id}")
     public ResponseEntity<BaseSuccessResponse> changeStatus(
             @PathVariable
-            @PositiveOrZero(message = ValidationConstants.ID_MUST_BE_POSITIVE)
+            @Positive(message = ValidationConstants.ID_MUST_BE_POSITIVE)
             Long id,
             @RequestBody
             @Valid
-            ChangeStatusTodoRequest dto) {
-        service.updateTodoStatus(id, dto.status());
+            ChangeStatusTodoRequest dto
+    ) {
+        service.updateTodoStatus(id, dto);
         return ResponseEntity.ok(BaseSuccessResponse.success());
     }
 
     @PatchMapping(path = "text/{id}")
     public ResponseEntity<BaseSuccessResponse> changeDetails(
             @PathVariable
-            @PositiveOrZero(message = ValidationConstants.ID_MUST_BE_POSITIVE)
+            @Positive(message = ValidationConstants.ID_MUST_BE_POSITIVE)
             Long id,
             @RequestBody
             @Valid
-            ChangeTextTodoRequest dto) {
-        service.updateDetails(id, dto.text());
+            ChangeTextTodoRequest dto
+    ) {
+        service.updateDetails(id, dto);
         return ResponseEntity.ok(BaseSuccessResponse.success());
     }
 }

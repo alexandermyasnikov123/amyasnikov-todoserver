@@ -15,14 +15,10 @@ public class BaseSuccessResponse {
     boolean success;
 
     public BaseSuccessResponse(int statusCode) {
-        this(statusCode, statusCode == ErrorCodes.OK.getCode());
-    }
-
-    public BaseSuccessResponse(ErrorCodes errorCodes) {
-        this(errorCodes.getCode());
+        this(statusCode, true);
     }
 
     public static BaseSuccessResponse success() {
-        return new BaseSuccessResponse(ErrorCodes.OK);
+        return new BaseSuccessResponse(ErrorCodes.OK.getCode());
     }
 }

@@ -1,22 +1,25 @@
 package net.dunice.todo.services;
 
 import jakarta.transaction.Transactional;
-import net.dunice.todo.entities.TodoEntity;
-import net.dunice.todo.paging.TodoEntityPage;
+import net.dunice.todo.DTOs.requests.ChangeStatusTodoRequest;
+import net.dunice.todo.DTOs.requests.ChangeTextTodoRequest;
+import net.dunice.todo.DTOs.requests.CreateTodoRequest;
+import net.dunice.todo.DTOs.responses.TodoEntityResponse;
+import net.dunice.todo.DTOs.responses.TodosPageResponse;
 
 public interface TodosService {
-    TodoEntity createNew(String details);
+    TodoEntityResponse insertNewEntity(CreateTodoRequest request);
 
-    TodoEntityPage findAllTodos(Boolean isReady, Integer page, Integer perPage);
-
-    @Transactional
-    void updateDetails(long id, String details);
+    TodosPageResponse findAllTodos(Boolean isReady, Integer page, Integer perPage);
 
     @Transactional
-    void updateAllTodosStatus(boolean isReady);
+    void updateDetails(long id, ChangeTextTodoRequest request);
 
     @Transactional
-    void updateTodoStatus(long id, boolean isReady);
+    void updateAllTodosStatus(ChangeStatusTodoRequest request);
+
+    @Transactional
+    void updateTodoStatus(long id, ChangeStatusTodoRequest request);
 
     void deleteById(long id);
 
