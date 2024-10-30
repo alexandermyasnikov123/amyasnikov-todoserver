@@ -16,12 +16,6 @@ public enum ErrorCodes {
 
     PARAM_PER_PAGE_NOT_NULL(16, ValidationConstants.PARAM_PER_PAGE_NOT_NULL),
 
-    PAGE_SIZE_NOT_VALID(18, ValidationConstants.PAGE_MUST_BE_AT_LEAST_1),
-
-    PER_PAGE_MIN_NOT_VALID(19, ValidationConstants.PER_PAGE_MUST_BE_AT_LEAST_1),
-
-    PER_PAGE_MAX_NOT_VALID(19, ValidationConstants.PER_PAGE_MUST_BE_LESS_100),
-
     ID_MUST_BE_POSITIVE(29, ValidationConstants.ID_MUST_BE_POSITIVE),
 
     TODO_TEXT_NOT_NULL(31, ValidationConstants.TODO_TEXT_NOT_NULL),
@@ -31,6 +25,12 @@ public enum ErrorCodes {
     TODO_STATUS_NOT_NULL(33, ValidationConstants.TODO_STATUS_NOT_NULL),
 
     TASK_NOT_FOUND(34, ValidationConstants.TASK_NOT_FOUND),
+
+    TASKS_PAGE_GREATER_OR_EQUAL_1(37, ValidationConstants.PAGE_MUST_BE_AT_LEAST_1),
+
+    TASKS_PER_PAGE_GREATER_OR_EQUAL_1(38, ValidationConstants.PER_PAGE_MUST_BE_AT_LEAST_1),
+
+    TASKS_PER_PAGE_LESS_OR_EQUAL_100(39, ValidationConstants.PER_PAGE_MUST_BE_LESS_100),
 
     REQUIRED_INT_PARAM_PAGE_IS_NOT_PRESENT(40, ValidationConstants.PARAMETER_PAGE_NOT_PRESENT),
 
