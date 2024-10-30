@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import net.dunice.todo.DTOs.requests.ChangeStatusTodoRequest;
 import net.dunice.todo.DTOs.requests.ChangeTextTodoRequest;
 import net.dunice.todo.DTOs.requests.CreateTodoRequest;
-import net.dunice.todo.DTOs.responses.TodoEntityResponse;
-import net.dunice.todo.DTOs.responses.TodosPageResponse;
+import net.dunice.todo.DTOs.responses.GetNewsDto;
+import net.dunice.todo.DTOs.responses.common.CustomSuccessResponse;
 import net.dunice.todo.constants.ErrorCodes;
 import net.dunice.todo.entities.TodoEntity;
 import net.dunice.todo.errors.EntityNotFoundException;
@@ -24,18 +24,18 @@ public class TodosServiceImpl implements TodosService {
     private final TodosRepository repository;
 
     @Override
-    public TodoEntityResponse insertNewEntity(CreateTodoRequest request) {
+    public CustomSuccessResponse<TodoEntity> insertNewEntity(CreateTodoRequest request) {
         TodoEntity todo = TodoEntity.builder()
                 .details(request.text())
                 .id(0L)
                 .isReady(false)
                 .build();
 
-        return new TodoEntityResponse(ErrorCodes.OK, repository.save(todo));
+        return new CustomSuccessResponse<>(ErrorCodes.OK, repository.save(todo));
     }
 
     @Override
-    public TodosPageResponse findAllTodos(Boolean isReady, Integer page, Integer perPage) {
+    public GetNewsDto findAllTodos(Boolean isReady, Integer page, Integer perPage) {
         Pageable request = PageRequest.of(page, perPage);
 
         Page<TodoEntity> entityPage = isReady == null ?
@@ -46,7 +46,7 @@ public class TodosServiceImpl implements TodosService {
         long ready = entityPage.stream().filter(TodoEntity::getIsReady).count();
         long notReady = numberOfElements - ready;
 
-        return new TodosPageResponse(entityPage.getContent(), ready, notReady, numberOfElements);
+        return new GetNewsDto(entityPage.getContent(), ready, notReady, numberOfElements);
     }
 
     @Transactional
@@ -54,6 +54,7 @@ public class TodosServiceImpl implements TodosService {
     public void updateDetails(long id, ChangeTextTodoRequest request) {
         TodoEntity todo = repository.findById(id).orElseThrow(EntityNotFoundException::new);
         todo.setDetails(request.text());
+
         repository.save(todo);
     }
 
@@ -73,6 +74,7 @@ public class TodosServiceImpl implements TodosService {
     public void updateTodoStatus(long id, ChangeStatusTodoRequest request) {
         TodoEntity todo = repository.findById(id).orElseThrow();
         todo.setIsReady(request.status());
+
         repository.save(todo);
     }
 

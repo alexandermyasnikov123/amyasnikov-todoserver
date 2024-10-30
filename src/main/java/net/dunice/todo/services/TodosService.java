@@ -4,13 +4,14 @@ import jakarta.transaction.Transactional;
 import net.dunice.todo.DTOs.requests.ChangeStatusTodoRequest;
 import net.dunice.todo.DTOs.requests.ChangeTextTodoRequest;
 import net.dunice.todo.DTOs.requests.CreateTodoRequest;
-import net.dunice.todo.DTOs.responses.TodoEntityResponse;
-import net.dunice.todo.DTOs.responses.TodosPageResponse;
+import net.dunice.todo.DTOs.responses.GetNewsDto;
+import net.dunice.todo.DTOs.responses.common.CustomSuccessResponse;
+import net.dunice.todo.entities.TodoEntity;
 
 public interface TodosService {
-    TodoEntityResponse insertNewEntity(CreateTodoRequest request);
+    CustomSuccessResponse<TodoEntity> insertNewEntity(CreateTodoRequest request);
 
-    TodosPageResponse findAllTodos(Boolean isReady, Integer page, Integer perPage);
+    GetNewsDto findAllTodos(Boolean isReady, Integer page, Integer perPage);
 
     @Transactional
     void updateDetails(long id, ChangeTextTodoRequest request);

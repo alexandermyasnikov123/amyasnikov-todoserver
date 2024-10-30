@@ -42,5 +42,5 @@ public interface ValidationConstants {
 
     String TASK_NOT_FOUND = "Can't find a task entity with the given id.";
 
-    String HTTP_MESSAGE_NOT_READABLE_EXCEPTION = "";
+    String HTTP_MESSAGE_NOT_READABLE_EXCEPTION = "Not readable Http message.";
 }

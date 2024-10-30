@@ -3,7 +3,6 @@ package net.dunice.todo.errors;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import net.dunice.todo.DTOs.responses.common.BaseSuccessResponse;
-import net.dunice.todo.DTOs.responses.common.ErrorSuccessResponse;
 import net.dunice.todo.constants.ErrorCodes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -50,7 +49,7 @@ public class GlobalExceptionHandler {
 
         int errorCode = errors.stream().findFirst().orElseThrow();
         return ResponseEntity.badRequest()
-                .body(ErrorSuccessResponse.withCurrentTimeStamp(errorCode, errors));
+                .body(BaseSuccessResponse.failed(errorCode, errors));
     }
 
     @ExceptionHandler(value = MissingServletRequestParameterException.class)
@@ -73,6 +72,6 @@ public class GlobalExceptionHandler {
     private ResponseEntity<BaseSuccessResponse> createBasicErrorResponse(ErrorCodes errorCodes) {
         int required = errorCodes.getCode();
         return ResponseEntity.badRequest()
-                .body(ErrorSuccessResponse.withCurrentTimeStamp(required, List.of(required)));
+                .body(BaseSuccessResponse.failed(required, List.of(required)));
     }
 }

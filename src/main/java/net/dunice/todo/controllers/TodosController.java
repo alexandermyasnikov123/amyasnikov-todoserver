@@ -8,12 +8,12 @@ import lombok.RequiredArgsConstructor;
 import net.dunice.todo.DTOs.requests.ChangeStatusTodoRequest;
 import net.dunice.todo.DTOs.requests.ChangeTextTodoRequest;
 import net.dunice.todo.DTOs.requests.CreateTodoRequest;
-import net.dunice.todo.DTOs.responses.GetPaginatedResponse;
-import net.dunice.todo.DTOs.responses.TodoEntityResponse;
-import net.dunice.todo.DTOs.responses.TodosPageResponse;
+import net.dunice.todo.DTOs.responses.GetNewsDto;
 import net.dunice.todo.DTOs.responses.common.BaseSuccessResponse;
+import net.dunice.todo.DTOs.responses.common.CustomSuccessResponse;
 import net.dunice.todo.constants.ErrorCodes;
 import net.dunice.todo.constants.ValidationConstants;
+import net.dunice.todo.entities.TodoEntity;
 import net.dunice.todo.services.TodosService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -35,7 +35,7 @@ public class TodosController {
     private final TodosService service;
 
     @GetMapping
-    public ResponseEntity<GetPaginatedResponse> findTodosByStatus(
+    public ResponseEntity<BaseSuccessResponse> findTodosByStatus(
             @RequestParam
             @Positive(message = ValidationConstants.PAGE_MUST_BE_AT_LEAST_1)
             Integer page,
@@ -45,18 +45,18 @@ public class TodosController {
             Integer perPage,
             Boolean status
     ) {
-        TodosPageResponse result = service.findAllTodos(status, page - 1, perPage);
-        GetPaginatedResponse body = new GetPaginatedResponse(ErrorCodes.OK, result);
+        GetNewsDto result = service.findAllTodos(status, page - 1, perPage);
+        CustomSuccessResponse<GetNewsDto> body = new CustomSuccessResponse<>(ErrorCodes.OK, result);
         return ResponseEntity.ok(body);
     }
 
     @PostMapping
-    public ResponseEntity<TodoEntityResponse> createTodo(
+    public ResponseEntity<BaseSuccessResponse> createTodo(
             @RequestBody
             @Valid
             CreateTodoRequest dto
     ) {
-        TodoEntityResponse body = service.insertNewEntity(dto);
+        CustomSuccessResponse<TodoEntity> body = service.insertNewEntity(dto);
         return ResponseEntity.ok(body);
     }
 
