@@ -30,7 +30,7 @@ public class TodosServiceImpl implements TodosService {
                 .isReady(false)
                 .build();
 
-        return new TodoEntityResponse(ErrorCodes.OK, todo);
+        return new TodoEntityResponse(ErrorCodes.OK, repository.save(todo));
     }
 
     @Override
