@@ -9,6 +9,7 @@ import net.dunice.todo.DTOs.responses.TodoEntityResponse;
 import net.dunice.todo.DTOs.responses.TodosPageResponse;
 import net.dunice.todo.constants.ErrorCodes;
 import net.dunice.todo.entities.TodoEntity;
+import net.dunice.todo.errors.EntityNotFoundException;
 import net.dunice.todo.repositories.TodosRepository;
 import net.dunice.todo.services.TodosService;
 import org.springframework.data.domain.Page;
@@ -51,7 +52,7 @@ public class TodosServiceImpl implements TodosService {
     @Transactional
     @Override
     public void updateDetails(long id, ChangeTextTodoRequest request) {
-        TodoEntity todo = repository.findById(id).orElseThrow();
+        TodoEntity todo = repository.findById(id).orElseThrow(EntityNotFoundException::new);
         todo.setDetails(request.text());
         repository.save(todo);
     }

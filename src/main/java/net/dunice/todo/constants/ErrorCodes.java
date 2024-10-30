@@ -12,7 +12,6 @@ public enum ErrorCodes {
 
     MUST_NOT_BE_NULL(4, ValidationConstants.MUST_NOT_BE_NULL),
 
-
     PARAM_PAGE_NOT_NULL(15, ValidationConstants.PARAM_PAGE_NOT_NULL),
 
     PARAM_PER_PAGE_NOT_NULL(16, ValidationConstants.PARAM_PER_PAGE_NOT_NULL),
@@ -31,9 +30,13 @@ public enum ErrorCodes {
 
     TODO_STATUS_NOT_NULL(33, ValidationConstants.TODO_STATUS_NOT_NULL),
 
+    TASK_NOT_FOUND(34, ValidationConstants.TASK_NOT_FOUND),
+
     REQUIRED_INT_PARAM_PAGE_IS_NOT_PRESENT(40, ValidationConstants.PARAMETER_PAGE_NOT_PRESENT),
 
-    REQUIRED_INT_PARAM_PER_PAGE_IS_NOT_PRESENT(41, ValidationConstants.PARAMETER_PER_PAGE_NOT_PRESENT);
+    REQUIRED_INT_PARAM_PER_PAGE_IS_NOT_PRESENT(41, ValidationConstants.PARAMETER_PER_PAGE_NOT_PRESENT),
+
+    HTTP_MESSAGE_NOT_READABLE_EXCEPTION(47, ValidationConstants.HTTP_MESSAGE_NOT_READABLE_EXCEPTION);
 
     private final int code;
 

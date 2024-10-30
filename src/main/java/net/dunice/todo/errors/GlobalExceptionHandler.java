@@ -6,6 +6,7 @@ import net.dunice.todo.DTOs.responses.common.BaseSuccessResponse;
 import net.dunice.todo.DTOs.responses.common.ErrorSuccessResponse;
 import net.dunice.todo.constants.ErrorCodes;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -51,5 +52,21 @@ public class GlobalExceptionHandler {
         int errorCode = errors.stream().findFirst().orElseThrow();
         return ResponseEntity.badRequest()
                 .body(ErrorSuccessResponse.withCurrentTimeStamp(errorCode, errors));
+    }
+
+    private ResponseEntity<BaseSuccessResponse> createBasicErrorResponse(ErrorCodes errorCodes) {
+        int required = errorCodes.getCode();
+        return ResponseEntity.badRequest()
+                .body(ErrorSuccessResponse.withCurrentTimeStamp(required, List.of(required)));
+    }
+
+    @ExceptionHandler(value = EntityNotFoundException.class)
+    protected ResponseEntity<BaseSuccessResponse> handleEntityNotFoundError(EntityNotFoundException ignored) {
+        return createBasicErrorResponse(ErrorCodes.TASK_NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    protected ResponseEntity<BaseSuccessResponse> handleNotReadableError(HttpMessageNotReadableException ignored) {
+        return createBasicErrorResponse(ErrorCodes.HTTP_MESSAGE_NOT_READABLE_EXCEPTION);
     }
 }

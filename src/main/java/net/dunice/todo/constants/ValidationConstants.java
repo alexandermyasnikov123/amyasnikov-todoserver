@@ -39,4 +39,8 @@ public interface ValidationConstants {
 
     String PARAM_PER_PAGE_NOT_NULL =
             "Required request parameter 'perPage' for method parameter type Integer is present but converted to null";
+
+    String TASK_NOT_FOUND = "Can't find a task entity with the given id.";
+
+    String HTTP_MESSAGE_NOT_READABLE_EXCEPTION = "";
 }
