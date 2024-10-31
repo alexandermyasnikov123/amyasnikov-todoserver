@@ -9,19 +9,26 @@ import jakarta.validation.constraints.PastOrPresent;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.With;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @With
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -29,8 +36,6 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity(name = "todo")
 public class TodoEntity {
-    public static final String DATE_TIME_PATTERN = "yyyy.MM.dd, hh:mm:ss";
-
     public static final int DETAILS_MIN_LENGTH = 3;
 
     public static final int DETAILS_MAX_LENGTH = 160;
@@ -46,13 +51,11 @@ public class TodoEntity {
     String details;
 
     @PastOrPresent
-    @DateTimeFormat(pattern = DATE_TIME_PATTERN)
     @JsonProperty(value = "createdAt")
     @CreatedDate
     @CreationTimestamp
     Date creationDate;
 
-    @DateTimeFormat(pattern = DATE_TIME_PATTERN)
     @JsonProperty(value = "updatedAt")
     @UpdateTimestamp
     Date lastUpdateDate;
@@ -60,5 +63,36 @@ public class TodoEntity {
     @JsonProperty(value = "status")
     @NonNull
     Boolean isReady;
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ?
+                ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() :
+                o.getClass();
+
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
+                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() :
+                this.getClass();
+
+        if (thisEffectiveClass != oEffectiveClass) {
+            return false;
+        }
+
+        TodoEntity that = (TodoEntity) o;
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ?
+                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() :
+                getClass().hashCode();
+    }
 }
 
