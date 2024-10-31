@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
     }
 
     private ResponseEntity<BaseSuccessResponse> createBasicErrorResponse(List<Integer> statuses) {
-        int code = statuses.stream().findFirst().orElseThrow();
+        Integer code = statuses.stream().findFirst().orElseThrow();
 
         return ResponseEntity.badRequest()
                 .body(BaseSuccessResponse.failed(code, statuses));

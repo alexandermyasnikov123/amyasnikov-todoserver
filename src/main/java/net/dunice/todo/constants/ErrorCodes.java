@@ -38,7 +38,7 @@ public enum ErrorCodes {
 
     HTTP_MESSAGE_NOT_READABLE_EXCEPTION(47, ValidationConstants.HTTP_MESSAGE_NOT_READABLE_EXCEPTION);
 
-    private final int code;
+    private final Integer code;
 
     private final String message;
 }

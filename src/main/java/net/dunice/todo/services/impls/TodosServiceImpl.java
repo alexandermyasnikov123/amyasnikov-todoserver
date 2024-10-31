@@ -42,9 +42,9 @@ public class TodosServiceImpl implements TodosService {
                 repository.findAll(request) :
                 repository.findAllByIsReady(isReady, request);
 
-        long numberOfElements = entityPage.getNumberOfElements();
-        long ready = entityPage.stream().filter(TodoEntity::getIsReady).count();
-        long notReady = numberOfElements - ready;
+        Long numberOfElements = Long.valueOf(entityPage.getNumberOfElements());
+        Long ready = entityPage.stream().filter(TodoEntity::getIsReady).count();
+        Long notReady = numberOfElements - ready;
 
         return new GetNewsResponse(entityPage.getContent(), ready, notReady, numberOfElements);
     }
