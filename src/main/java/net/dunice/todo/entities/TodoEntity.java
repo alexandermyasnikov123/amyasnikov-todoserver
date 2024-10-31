@@ -40,7 +40,7 @@ public class TodoEntity {
     @NonNull
     Long id;
 
-    @Length(min = 1, max = 255)
+    @Length(min = DETAILS_MIN_LENGTH, max = DETAILS_MAX_LENGTH)
     @JsonProperty(value = "text")
     @NonNull
     String details;

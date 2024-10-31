@@ -2,7 +2,6 @@ package net.dunice.todo.controllers;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import net.dunice.todo.DTOs.requests.ChangeStatusTodoRequest;
@@ -40,7 +39,7 @@ public class TodosController {
             @Positive(message = ValidationConstants.PAGE_MUST_BE_AT_LEAST_1)
             Integer page,
             @RequestParam
-            @Min(value = 1, message = ValidationConstants.PER_PAGE_MUST_BE_AT_LEAST_1)
+            @Positive(message = ValidationConstants.PER_PAGE_MUST_BE_AT_LEAST_1)
             @Max(value = 100, message = ValidationConstants.PER_PAGE_MUST_BE_LESS_100)
             Integer perPage,
             Boolean status

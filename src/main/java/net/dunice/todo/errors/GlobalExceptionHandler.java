@@ -15,63 +15,61 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     private final Map<String, ErrorCodes> errorCodes = Arrays.stream(ErrorCodes.values())
             .collect(Collectors.toMap(ErrorCodes::getMessage, errorCode -> errorCode));
 
+    private ResponseEntity<BaseSuccessResponse> createBasicErrorResponse(List<Integer> statuses) {
+        int code = statuses.stream().findFirst().orElseThrow();
+
+        return ResponseEntity.badRequest()
+                .body(BaseSuccessResponse.failed(code, statuses));
+    }
+
+    private ResponseEntity<BaseSuccessResponse> mapToErrorResponse(Stream<String> messages) {
+        List<Integer> errors = messages
+                .map(message -> errorCodes.getOrDefault(message, ErrorCodes.UNKNOWN).getCode())
+                .toList();
+
+        return createBasicErrorResponse(errors);
+    }
+
     @ExceptionHandler(value = ConstraintViolationException.class)
     protected ResponseEntity<BaseSuccessResponse> handleConstraintsExceptions(ConstraintViolationException exception) {
-        List<String> messages = exception.getConstraintViolations()
+        Stream<String> messages = exception.getConstraintViolations()
                 .stream()
-                .map(ConstraintViolation::getMessage)
-                .toList();
+                .map(ConstraintViolation::getMessage);
 
         return mapToErrorResponse(messages);
     }
 
     @ExceptionHandler(value = BindException.class)
     protected ResponseEntity<BaseSuccessResponse> handleBindExceptions(BindException exception) {
-        List<String> errors = exception.getBindingResult()
+        Stream<String> errors = exception.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(FieldError::getDefaultMessage)
-                .toList();
+                .map(FieldError::getDefaultMessage);
 
         return mapToErrorResponse(errors);
-    }
-
-    private ResponseEntity<BaseSuccessResponse> mapToErrorResponse(List<String> messages) {
-        List<Integer> errors = messages.stream()
-                .map(message -> errorCodes.getOrDefault(message, ErrorCodes.UNKNOWN).getCode())
-                .toList();
-
-        int errorCode = errors.stream().findFirst().orElseThrow();
-        return ResponseEntity.badRequest()
-                .body(BaseSuccessResponse.failed(errorCode, errors));
     }
 
     @ExceptionHandler(value = MissingServletRequestParameterException.class)
     protected ResponseEntity<BaseSuccessResponse> handleMissingParametersExceptions(
             MissingServletRequestParameterException exception
     ) {
-        return mapToErrorResponse(List.of(exception.getMessage()));
+        return mapToErrorResponse(Stream.of(exception.getMessage()));
     }
 
     @ExceptionHandler(value = EntityNotFoundException.class)
     protected ResponseEntity<BaseSuccessResponse> handleEntityNotFoundError(EntityNotFoundException ignored) {
-        return createBasicErrorResponse(ErrorCodes.TASK_NOT_FOUND);
+        return createBasicErrorResponse(List.of(ErrorCodes.TASK_NOT_FOUND.getCode()));
     }
 
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
     protected ResponseEntity<BaseSuccessResponse> handleNotReadableError(HttpMessageNotReadableException ignored) {
-        return createBasicErrorResponse(ErrorCodes.HTTP_MESSAGE_NOT_READABLE_EXCEPTION);
-    }
-
-    private ResponseEntity<BaseSuccessResponse> createBasicErrorResponse(ErrorCodes errorCodes) {
-        int required = errorCodes.getCode();
-        return ResponseEntity.badRequest()
-                .body(BaseSuccessResponse.failed(required, List.of(required)));
+        return createBasicErrorResponse(List.of(ErrorCodes.HTTP_MESSAGE_NOT_READABLE_EXCEPTION.getCode()));
     }
 }
