@@ -24,7 +24,7 @@ public class BaseSuccessResponse {
     @Nullable
     Date timeStamp;
 
-    protected BaseSuccessResponse(int statusCode) {
+    protected BaseSuccessResponse(Integer statusCode) {
         this(statusCode, true, List.of(), null);
     }
 
@@ -32,7 +32,7 @@ public class BaseSuccessResponse {
         return new BaseSuccessResponse(ErrorCodes.OK.getCode());
     }
 
-    public static BaseSuccessResponse failed(int statusCode, Iterable<Integer> statusCodes) {
+    public static BaseSuccessResponse failed(Integer statusCode, Iterable<Integer> statusCodes) {
         return new BaseSuccessResponse(statusCode, true, statusCodes, new Date());
     }
 }

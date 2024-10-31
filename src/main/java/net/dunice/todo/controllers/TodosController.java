@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import net.dunice.todo.DTOs.requests.ChangeStatusTodoRequest;
 import net.dunice.todo.DTOs.requests.ChangeTextTodoRequest;
 import net.dunice.todo.DTOs.requests.CreateTodoRequest;
-import net.dunice.todo.DTOs.responses.GetNewsDto;
+import net.dunice.todo.DTOs.responses.GetNewsResponse;
 import net.dunice.todo.DTOs.responses.common.BaseSuccessResponse;
 import net.dunice.todo.DTOs.responses.common.CustomSuccessResponse;
 import net.dunice.todo.constants.ErrorCodes;
@@ -44,8 +44,8 @@ public class TodosController {
             Integer perPage,
             Boolean status
     ) {
-        GetNewsDto result = service.findAllTodos(status, page - 1, perPage);
-        CustomSuccessResponse<GetNewsDto> body = new CustomSuccessResponse<>(ErrorCodes.OK, result);
+        GetNewsResponse result = service.findAllTodos(status, page - 1, perPage);
+        CustomSuccessResponse<GetNewsResponse> body = new CustomSuccessResponse<>(ErrorCodes.OK, result);
         return ResponseEntity.ok(body);
     }
 

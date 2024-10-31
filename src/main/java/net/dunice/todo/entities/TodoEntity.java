@@ -1,6 +1,7 @@
 package net.dunice.todo.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +21,6 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import java.util.Date;
 import java.util.Objects;
@@ -28,12 +28,12 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @With
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
+@RequiredArgsConstructor
 @Entity(name = "todo")
 public class TodoEntity {
     public static final int DETAILS_MIN_LENGTH = 3;
@@ -45,7 +45,7 @@ public class TodoEntity {
     @NonNull
     Long id;
 
-    @Length(min = DETAILS_MIN_LENGTH, max = DETAILS_MAX_LENGTH)
+    @Column(length = DETAILS_MAX_LENGTH)
     @JsonProperty(value = "text")
     @NonNull
     String details;
@@ -72,12 +72,12 @@ public class TodoEntity {
         if (o == null) {
             return false;
         }
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ?
-                ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() :
+        Class<?> oEffectiveClass = o instanceof HibernateProxy proxy ?
+                proxy.getHibernateLazyInitializer().getPersistentClass() :
                 o.getClass();
 
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy ?
-                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() :
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy proxy ?
+                proxy.getHibernateLazyInitializer().getPersistentClass() :
                 this.getClass();
 
         if (thisEffectiveClass != oEffectiveClass) {
@@ -90,8 +90,8 @@ public class TodoEntity {
 
     @Override
     public final int hashCode() {
-        return this instanceof HibernateProxy ?
-                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() :
+        return this instanceof HibernateProxy proxy ?
+                proxy.getHibernateLazyInitializer().getPersistentClass().hashCode() :
                 getClass().hashCode();
     }
 }

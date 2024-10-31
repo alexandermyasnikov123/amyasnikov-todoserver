@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.dunice.todo.DTOs.requests.ChangeStatusTodoRequest;
 import net.dunice.todo.DTOs.requests.ChangeTextTodoRequest;
 import net.dunice.todo.DTOs.requests.CreateTodoRequest;
-import net.dunice.todo.DTOs.responses.GetNewsDto;
+import net.dunice.todo.DTOs.responses.GetNewsResponse;
 import net.dunice.todo.DTOs.responses.common.CustomSuccessResponse;
 import net.dunice.todo.constants.ErrorCodes;
 import net.dunice.todo.entities.TodoEntity;
@@ -35,7 +35,7 @@ public class TodosServiceImpl implements TodosService {
     }
 
     @Override
-    public GetNewsDto findAllTodos(Boolean isReady, Integer page, Integer perPage) {
+    public GetNewsResponse findAllTodos(Boolean isReady, Integer page, Integer perPage) {
         Pageable request = PageRequest.of(page, perPage);
 
         Page<TodoEntity> entityPage = isReady == null ?
@@ -46,12 +46,12 @@ public class TodosServiceImpl implements TodosService {
         long ready = entityPage.stream().filter(TodoEntity::getIsReady).count();
         long notReady = numberOfElements - ready;
 
-        return new GetNewsDto(entityPage.getContent(), ready, notReady, numberOfElements);
+        return new GetNewsResponse(entityPage.getContent(), ready, notReady, numberOfElements);
     }
 
     @Transactional
     @Override
-    public void updateDetails(long id, ChangeTextTodoRequest request) {
+    public void updateDetails(Long id, ChangeTextTodoRequest request) {
         TodoEntity todo = repository.findById(id).orElseThrow(EntityNotFoundException::new);
         todo.setDetails(request.text());
 
@@ -71,7 +71,7 @@ public class TodosServiceImpl implements TodosService {
 
     @Transactional
     @Override
-    public void updateTodoStatus(long id, ChangeStatusTodoRequest request) {
+    public void updateTodoStatus(Long id, ChangeStatusTodoRequest request) {
         TodoEntity todo = repository.findById(id).orElseThrow();
         todo.setIsReady(request.status());
 
@@ -79,7 +79,7 @@ public class TodosServiceImpl implements TodosService {
     }
 
     @Override
-    public void deleteById(long id) {
+    public void deleteById(Long id) {
         repository.deleteById(id);
     }
 

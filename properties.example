@@ -1,0 +1,7 @@
+To run the project on your local machine, you need to replace the characters "*" in the file
+"todo/src/main/resources/application.properties" with the name of your Postgresql database,
+"**" with the username of the user, and "***", respectively, with his password.
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/*
+spring.datasource.username=**
+spring.datasource.password=***

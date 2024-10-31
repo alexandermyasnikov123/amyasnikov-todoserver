@@ -22,21 +22,6 @@ public class GlobalExceptionHandler {
     private final Map<String, ErrorCodes> errorCodes = Arrays.stream(ErrorCodes.values())
             .collect(Collectors.toMap(ErrorCodes::getMessage, errorCode -> errorCode));
 
-    private ResponseEntity<BaseSuccessResponse> createBasicErrorResponse(List<Integer> statuses) {
-        int code = statuses.stream().findFirst().orElseThrow();
-
-        return ResponseEntity.badRequest()
-                .body(BaseSuccessResponse.failed(code, statuses));
-    }
-
-    private ResponseEntity<BaseSuccessResponse> mapToErrorResponse(Stream<String> messages) {
-        List<Integer> errors = messages
-                .map(message -> errorCodes.getOrDefault(message, ErrorCodes.UNKNOWN).getCode())
-                .toList();
-
-        return createBasicErrorResponse(errors);
-    }
-
     @ExceptionHandler(value = ConstraintViolationException.class)
     protected ResponseEntity<BaseSuccessResponse> handleConstraintsExceptions(ConstraintViolationException exception) {
         Stream<String> messages = exception.getConstraintViolations()
@@ -64,12 +49,27 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = EntityNotFoundException.class)
-    protected ResponseEntity<BaseSuccessResponse> handleEntityNotFoundError(EntityNotFoundException ignored) {
-        return createBasicErrorResponse(List.of(ErrorCodes.TASK_NOT_FOUND.getCode()));
+    protected ResponseEntity<BaseSuccessResponse> handleEntityNotFoundError(EntityNotFoundException exception) {
+        return createBasicErrorResponse(List.of(exception.getErrorCode().getCode()));
     }
 
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
     protected ResponseEntity<BaseSuccessResponse> handleNotReadableError(HttpMessageNotReadableException ignored) {
         return createBasicErrorResponse(List.of(ErrorCodes.HTTP_MESSAGE_NOT_READABLE_EXCEPTION.getCode()));
+    }
+
+    private ResponseEntity<BaseSuccessResponse> createBasicErrorResponse(List<Integer> statuses) {
+        int code = statuses.stream().findFirst().orElseThrow();
+
+        return ResponseEntity.badRequest()
+                .body(BaseSuccessResponse.failed(code, statuses));
+    }
+
+    private ResponseEntity<BaseSuccessResponse> mapToErrorResponse(Stream<String> messages) {
+        List<Integer> errors = messages
+                .map(message -> errorCodes.getOrDefault(message, ErrorCodes.UNKNOWN).getCode())
+                .toList();
+
+        return createBasicErrorResponse(errors);
     }
 }
