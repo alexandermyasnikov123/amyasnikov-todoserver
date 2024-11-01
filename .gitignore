@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 **/dev.properties
+**/test
+**/*Test*.java
 
 ### STS ###
 .apt_generated
