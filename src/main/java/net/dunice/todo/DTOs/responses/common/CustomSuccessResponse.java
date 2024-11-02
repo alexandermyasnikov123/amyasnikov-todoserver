@@ -11,8 +11,8 @@ import net.dunice.todo.constants.ErrorCodes;
 public class CustomSuccessResponse<T> extends BaseSuccessResponse {
     T data;
 
-    public CustomSuccessResponse(ErrorCodes errorCodes, T data) {
-        super(errorCodes.getCode());
+    public CustomSuccessResponse(T data) {
+        super(ErrorCodes.OK.getCode());
         this.data = data;
     }
 }

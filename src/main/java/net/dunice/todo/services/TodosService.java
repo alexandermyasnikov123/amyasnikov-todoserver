@@ -5,11 +5,10 @@ import net.dunice.todo.DTOs.requests.ChangeStatusTodoRequest;
 import net.dunice.todo.DTOs.requests.ChangeTextTodoRequest;
 import net.dunice.todo.DTOs.requests.CreateTodoRequest;
 import net.dunice.todo.DTOs.responses.GetNewsResponse;
-import net.dunice.todo.DTOs.responses.common.CustomSuccessResponse;
 import net.dunice.todo.entities.TodoEntity;
 
 public interface TodosService {
-    CustomSuccessResponse<TodoEntity> insertNewEntity(CreateTodoRequest request);
+    TodoEntity insertNewEntity(CreateTodoRequest request);
 
     GetNewsResponse findAllTodos(Boolean isReady, Integer page, Integer perPage);
 

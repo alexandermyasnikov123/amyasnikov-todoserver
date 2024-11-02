@@ -6,8 +6,6 @@ import net.dunice.todo.DTOs.requests.ChangeStatusTodoRequest;
 import net.dunice.todo.DTOs.requests.ChangeTextTodoRequest;
 import net.dunice.todo.DTOs.requests.CreateTodoRequest;
 import net.dunice.todo.DTOs.responses.GetNewsResponse;
-import net.dunice.todo.DTOs.responses.common.CustomSuccessResponse;
-import net.dunice.todo.constants.ErrorCodes;
 import net.dunice.todo.entities.TodoEntity;
 import net.dunice.todo.errors.EntityNotFoundException;
 import net.dunice.todo.repositories.TodosRepository;
@@ -24,19 +22,19 @@ public class TodosServiceImpl implements TodosService {
     private final TodosRepository repository;
 
     @Override
-    public CustomSuccessResponse<TodoEntity> insertNewEntity(CreateTodoRequest request) {
+    public TodoEntity insertNewEntity(CreateTodoRequest request) {
         TodoEntity todo = TodoEntity.builder()
                 .details(request.text())
                 .id(0L)
                 .isReady(false)
                 .build();
 
-        return new CustomSuccessResponse<>(ErrorCodes.OK, repository.save(todo));
+        return repository.save(todo);
     }
 
     @Override
     public GetNewsResponse findAllTodos(Boolean isReady, Integer page, Integer perPage) {
-        Pageable request = PageRequest.of(page, perPage);
+        Pageable request = PageRequest.of(page - 1, perPage);
 
         Page<TodoEntity> entityPage = isReady == null ?
                 repository.findAll(request) :

@@ -1,30 +1,30 @@
 const apiBaseUrl = 'http://localhost:8080/v1/todo';
 
 function formatDate(dateString) {
-    return new Date(element.createdAt).toLocaleString("ru-RU");
+    return new Date(dateString).toLocaleString('ru-RU');
 }
 
 document.getElementById('createTodoButton').addEventListener('click', function() {
-    const text = document.getElementById('todoTitle').value; // Changed from title to text
+    const text = document.getElementById('todoTitle').value;
 
     fetch(apiBaseUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ text: text }) // Updated to send text
+        body: JSON.stringify({ text: text })
     })
     .then(response => {
-    console.log("Response " + JSON.stringify(response))
+        console.log("Response " + JSON.stringify(response))
         if (!response.ok) {
             throw new Error('Network response was not ok ' + response.statusText);
         }
         return response.json();
     })
     .then(data => {
-        element = data.data;
+        const element = data.data;
         document.getElementById('result').innerHTML = `Todo created at ${formatDate(element.createdAt)}: id - ${element.id}, text - ${element.text}, last update - ${formatDate(element.updatedAt)}`;
-        document.getElementById('todoTitle').value = ''; // Clear input field
+        document.getElementById('todoTitle').value = '';
     })
     .then(a => {
         document.getElementById('getTodosButton').click();
@@ -47,16 +47,16 @@ document.getElementById('getTodosButton').addEventListener('click', function() {
             return response.json();
         })
         .then(data => {
-            console.log(data); // Inspect the response data
+            console.log(data);
             const todosTableBody = document.getElementById('todosTableBody');
             const todoCount = document.getElementById('todoCount');
-            todosTableBody.innerHTML = ''; // Clear table before adding new items
+            const element = data.data;
+            todosTableBody.innerHTML = '';
 
-            // Access the content from the new response structure
-            const todos = data.data.content; // Updated to access the new structure
+            const todos = element.content;
             if (Array.isArray(todos)) {
                 todos.forEach(todo => {
-                    const row = document.createElement('tr'); // Create a new table row
+                    const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${todo.id}</td>
                         <td>${todo.text}</td>
@@ -64,9 +64,9 @@ document.getElementById('getTodosButton').addEventListener('click', function() {
                         <td>${formatDate(todo.createdAt)}</td>
                         <td>${formatDate(todo.updatedAt)}</td>
                     `;
-                    todosTableBody.appendChild(row); // Append the row to the table body
+                    todosTableBody.appendChild(row);
                 });
-                todoCount.innerHTML = `Total Todos: ${data.data.numberOfElements}`; // Display the total count of todos
+                todoCount.innerHTML = `Total Todos: ${element.numberOfElements}, completed: ${element.ready}, not completed: ${element.notReady}`;
             } else {
                 console.error('API response content is not an array:', todos);
             }
@@ -76,7 +76,6 @@ document.getElementById('getTodosButton').addEventListener('click', function() {
         });
 });
 
-// Other event listeners remain unchanged
 document.getElementById('deleteAllCompletedButton').addEventListener('click', function() {
     fetch(apiBaseUrl, {
         method: 'DELETE'
@@ -139,7 +138,7 @@ document.getElementById('deleteTodoButton').addEventListener('click', function()
     })
     .then(data => {
         document.getElementById('result').innerHTML = 'Todo deleted: ' + JSON.stringify(data);
-        document.getElementById('todoId').value = ''; // Clear input field
+        document.getElementById('todoId').value = '';
     })
     .then(a => {
             document.getElementById('getTodosButton').click();
@@ -168,7 +167,7 @@ document.getElementById('updateTodoStatusButton').addEventListener('click', func
     })
     .then(data => {
         document.getElementById('result').innerHTML = 'Todo status updated: ' + JSON.stringify(data);
-        document.getElementById('updateStatusTodoId').value = ''; // Clear input field
+        document.getElementById('updateStatusTodoId').value = '';
     })
     .then(a => {
             document.getElementById('getTodosButton').click();
@@ -197,11 +196,11 @@ document.getElementById('updateTodoTextButton').addEventListener('click', functi
     })
     .then(data => {
         document.getElementById('result').innerHTML = 'Todo text updated: ' + JSON.stringify(data);
-        document.getElementById('updateTextTodoId').value = ''; // Clear input field
-        document.getElementById('newText').value = ''; // Clear input field
+        document.getElementById('updateTextTodoId').value = '';
+        document.getElementById('newText').value = '';
     })
     .then(a => {
-                document.getElementById('getTodosButton').click();
+        document.getElementById('getTodosButton').click();
     })
     .catch(error => {
         document.getElementById('result').innerHTML = '<span class="error">Error: ' + error.message + '</span>';

@@ -10,7 +10,6 @@ import net.dunice.todo.DTOs.requests.CreateTodoRequest;
 import net.dunice.todo.DTOs.responses.GetNewsResponse;
 import net.dunice.todo.DTOs.responses.common.BaseSuccessResponse;
 import net.dunice.todo.DTOs.responses.common.CustomSuccessResponse;
-import net.dunice.todo.constants.ErrorCodes;
 import net.dunice.todo.constants.ValidationConstants;
 import net.dunice.todo.entities.TodoEntity;
 import net.dunice.todo.services.TodosService;
@@ -44,8 +43,8 @@ public class TodosController {
             Integer perPage,
             Boolean status
     ) {
-        GetNewsResponse result = service.findAllTodos(status, page - 1, perPage);
-        CustomSuccessResponse<GetNewsResponse> body = new CustomSuccessResponse<>(ErrorCodes.OK, result);
+        GetNewsResponse result = service.findAllTodos(status, page, perPage);
+        CustomSuccessResponse<GetNewsResponse> body = new CustomSuccessResponse<>(result);
         return ResponseEntity.ok(body);
     }
 
@@ -55,7 +54,8 @@ public class TodosController {
             @Valid
             CreateTodoRequest dto
     ) {
-        CustomSuccessResponse<TodoEntity> body = service.insertNewEntity(dto);
+        TodoEntity entity = service.insertNewEntity(dto);
+        CustomSuccessResponse<TodoEntity> body = new CustomSuccessResponse<>(entity);
         return ResponseEntity.ok(body);
     }
 
