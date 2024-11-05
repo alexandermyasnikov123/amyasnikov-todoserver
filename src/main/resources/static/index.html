@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo API Client</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #result {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .error {
+            color: red;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<h1>Todo API Client</h1>
+
+<h2>Create Todo</h2>
+<input type="text" id="todoTitle" placeholder="Enter todo text" />
+<button id="createTodoButton">Create Todo</button>
+
+<h2>Get Todos</h2>
+<input type="number" id="page" value="1" />
+<input type="number" id="perPage" value="10" />
+<select id="status">
+    <option value="">All</option>
+    <option value="true">Completed</option>
+    <option value="false">Not Completed</option>
+</select>
+<button id="getTodosButton">Get Todos</button>
+
+<h2>Todos List</h2>
+<div id="todosList">
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Text</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Updated At</th>
+        </tr>
+        </thead>
+        <tbody id="todosTableBody">
+        </tbody>
+    </table>
+</div>
+<div id="todoCount"></div>
+
+<h2>Delete All Completed Todos</h2>
+<button id="deleteAllCompletedButton">Delete All Completed</button>
+
+<h2>Update All Todos Status</h2>
+<select id="newStatus">
+    <option value="true">Completed</option>
+    <option value="false">Not Completed</option>
+</select>
+<button id="updateAllStatusButton">Update All Status</button>
+
+<h2>Delete Todo</h2>
+<input type="number" id="todoId" placeholder="Enter todo ID to delete" />
+<button id="deleteTodoButton">Delete Todo</button>
+
+<h2>Update Todo Status</h2>
+<input type="number" id="updateStatusTodoId" placeholder="Enter todo ID to update status" />
+<select id="newStatusForTodo">
+    <option value="true">Completed</option>
+    <option value="false">Not Completed</option>
+</select>
+<button id="updateTodoStatusButton">Update Todo Status</button>
+
+<h2>Update Todo Text</h2>
+<input type="number" id="updateTextTodoId" placeholder="Enter todo ID to update text" />
+<input type="text" id="newText" placeholder="Enter new text" />
+<button id="updateTodoTextButton">Update Todo Text</button>
+
+<h2>Result</h2>
+<div id="result"></div>
+
+<script src="scripts/todoClient.js"></script>
+</body>
+</html>
